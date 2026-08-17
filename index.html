@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- maximum-scale keeps the installed app from zooming in when a note
+         field takes focus; Safari ignores it while browsing, so pinch-zoom
+         stays available there. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+    />
+    <title>turtle — Habit Tracker</title>
+    <meta name="description" content="Ein ruhiger Tracker für fünf Lebensbereiche." />
+    <meta name="theme-color" content="#f5ead8" />
+
+    <!-- Home-screen install (iOS reads these, not the manifest) -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="turtle" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

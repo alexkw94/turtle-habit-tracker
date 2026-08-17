@@ -1,0 +1,10 @@
+node_modules
+dist
+dev-dist
+*.local
+*.tsbuildinfo
+
+# macOS metadata — this project lives on a non-HFS volume, which makes the
+# Finder scatter AppleDouble sidecars next to every file.
+.DS_Store
+._*
