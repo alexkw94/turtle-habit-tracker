@@ -1,13 +1,33 @@
 # turtle — Habit Tracker
 
-Implementierung von `../project/Habit Tracker.dc.html` (Claude-Design-Handoff) in
-React + Vite + TypeScript.
+Implementierung eines Claude-Design-Handoffs (`Habit Tracker.dc.html`, liegt
+ausserhalb dieses Repos) in React + Vite + TypeScript.
+
+**Live:** https://alexkw94.github.io/turtle-habit-tracker/
 
 ```bash
 npm install
 npm run dev      # http://localhost:5173
 npm run build    # tsc -b && vite build
+npm run preview -- --host   # gebauten Stand im WLAN testen
 ```
+
+## Deployment
+
+Push auf `main` → GitHub Actions baut und veröffentlicht auf GitHub Pages
+(`.github/workflows/deploy.yml`). Weil Pages unter einem Unterpfad ausliefert,
+steht in `vite.config.ts` `base: '/turtle-habit-tracker/'` — bei einer eigenen
+Domain muss das auf `'/'` zurück.
+
+## Auf dem Handy installieren
+
+Die Seite in **Safari** öffnen → Teilen → *Zum Home-Bildschirm*. Danach startet
+sie ohne Browser-Leiste, mit eigenem Icon, und funktioniert dank Service Worker
+auch offline. Der Geräterahmen der Design-Vorschau entfällt auf schmalen
+Bildschirmen automatisch (siehe die Media Query am Ende von `app.css`).
+
+Die Daten liegen im `localStorage` des jeweiligen Geräts — Handy und Laptop
+führen getrennte Stände, und ein Löschen der Safari-Daten löscht sie mit.
 
 ## Aufbau
 
@@ -38,3 +58,8 @@ Der Auswertungstext der Wochenansicht ist wörtlich aus dem Design übernommen u
 damit auf dessen Samstag gemünzt („Zwei Tage bleiben noch."). Er passt sich dem
 echten Wochentag **nicht** an; das wäre neuer Text und damit eine
 Design-Entscheidung.
+
+Der Schalter „Sanfte Abenderinnerung" ist wie im Design reine Oberfläche: er
+merkt sich seinen Zustand, verschickt aber nichts. Eine echte Erinnerung um
+21:00 bräuchte Web Push samt Notification-Berechtigung — auf iOS erst ab 16.4
+und nur für die installierte Variante.
