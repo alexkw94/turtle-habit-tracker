@@ -34,17 +34,17 @@ export function DayScreen({
   const markOf = (area: AreaId): MarkState => data.marks[dayKey]?.[area] ?? 'open';
   const cleanCount = activeAreas.filter(area => markOf(area.id) === 'clean').length;
 
-  const title =
-    selected === week.todayIndex
-      ? 'Heute'
-      : selected === week.todayIndex - 1
-        ? 'Gestern'
-        : DAY_NAMES[selected];
+  // 'Heute' and 'Gestern' only mean anything while the running week is shown.
+  const isToday = week.isCurrent && selected === week.todayIndex;
+  const title = isToday
+    ? 'Heute'
+    : week.isCurrent && selected === week.todayIndex - 1
+      ? 'Gestern'
+      : DAY_NAMES[selected];
 
-  const noteLabel =
-    selected === week.todayIndex
-      ? 'Notiz zum Tag'
-      : `Notiz — ${formatDate(week.days[selected])}`;
+  const noteLabel = isToday
+    ? 'Notiz zum Tag'
+    : `Notiz — ${formatDate(week.days[selected])}`;
 
   return (
     <div className="screen">
@@ -99,7 +99,7 @@ export function DayScreen({
               onTap={() => actions.setMark(dayKey, area.id, nextMark(state))}
             >
               <div className="habit__icon">
-                <AreaIcon area={area.id} />
+                <AreaIcon area={area} />
               </div>
               <div className="habit__body">
                 <div className="habit__name">{area.name}</div>

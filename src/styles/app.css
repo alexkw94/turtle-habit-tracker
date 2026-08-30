@@ -296,8 +296,21 @@ body {
   border-radius: 999px;
   display: grid;
   place-items: center;
-  background: var(--mark-tint);
+  /* The artwork brings its own coloured disc, so no tint behind it. */
+  background: transparent;
   color: var(--mark-ink);
+}
+.area-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  display: block;
+}
+/* A finished day shows its icon in full colour; an open or missed one is
+   washed back into the warm page, the way the design system treats imagery. */
+.mark-open .area-icon,
+.mark-miss .area-icon {
+  filter: saturate(0.45) contrast(0.9) brightness(1.06) opacity(0.72);
 }
 .habit__body {
   flex: 1;
@@ -370,6 +383,39 @@ body {
 }
 
 /* ── week ─────────────────────────────────────────────────────────────── */
+
+/* Week navigation. Not in the prototype, which only ever drew the running
+   week — the arrows are what make the stored history reachable. */
+.weekhead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.weekhead__text {
+  min-width: 0;
+}
+.weeknav {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+.weeknav__btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--color-neutral-100);
+  color: var(--color-accent-2-800);
+  box-shadow: var(--shadow-sm);
+  font: 400 19px/1 var(--font-body);
+  padding-bottom: 2px;
+}
+.weeknav__btn--off {
+  opacity: 0.35;
+  box-shadow: none;
+}
 
 .areacard {
   padding: 14px 16px;
@@ -590,6 +636,27 @@ body {
 .stepper--up {
   background: var(--color-accent-2-200);
   color: var(--color-accent-2-800);
+}
+
+.backup {
+  padding: 16px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+}
+.backup__head {
+  margin-bottom: 12px;
+}
+.backup__actions {
+  display: flex;
+  gap: 8px;
+}
+.backup__actions .btn {
+  flex: 1;
+}
+.backup__status {
+  margin-top: 10px;
+  font: 400 12.5px/1.4 var(--font-body);
+  color: var(--color-accent-2-700);
 }
 
 .reminder {

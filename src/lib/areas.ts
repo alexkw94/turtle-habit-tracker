@@ -7,14 +7,18 @@ export type MarkState = Mark | 'open';
 export interface Area {
   id: AreaId;
   name: string;
+  /** Artwork for the day list, resolved against the deploy base path. */
+  icon: string;
 }
 
+const asset = (file: string) => `${import.meta.env.BASE_URL}areas/${file}`;
+
 export const AREAS: Area[] = [
-  { id: 'med', name: 'Meditation' },
-  { id: 'food', name: 'Ernährung' },
-  { id: 'sleep', name: 'Schlaf' },
-  { id: 'sport', name: 'Sport' },
-  { id: 'focus', name: 'Ablenkungen' },
+  { id: 'med', name: 'Meditation', icon: asset('lotus-position.png') },
+  { id: 'food', name: 'Ernährung', icon: asset('dish.png') },
+  { id: 'sleep', name: 'Schlaf', icon: asset('sleeping.png') },
+  { id: 'sport', name: 'Sport', icon: asset('table-tennis.png') },
+  { id: 'focus', name: 'Ablenkungen', icon: asset('no-smartphones.png') },
 ];
 
 /** Glyph and copy per mark state; the colors live in `.mark-*` in app.css. */

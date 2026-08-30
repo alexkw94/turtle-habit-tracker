@@ -27,7 +27,9 @@ auch offline. Der Geräterahmen der Design-Vorschau entfällt auf schmalen
 Bildschirmen automatisch (siehe die Media Query am Ende von `app.css`).
 
 Die Daten liegen im `localStorage` des jeweiligen Geräts — Handy und Laptop
-führen getrennte Stände, und ein Löschen der Safari-Daten löscht sie mit.
+führen getrennte Stände, und ein Löschen der Safari-Daten löscht sie mit. Unter
+*Ziele → Deine Aufzeichnungen* lässt sich alles als JSON sichern (auf iOS über
+das Teilen-Menü) und auf einem anderen Gerät wieder einlesen.
 
 ## Aufbau
 
@@ -39,7 +41,8 @@ führen getrennte Stände, und ein Löschen der Safari-Daten löscht sie mit.
 | `src/components/Tappable.tsx` | Das Tap-Target des Prototyps, zusätzlich per Enter/Space bedienbar. |
 | `src/screens/` | Tag, Woche, Ziele. |
 | `src/state/useHabitStore.ts` | Zustand + `localStorage`-Persistenz. |
-| `src/lib/` | Bereiche und Markierungs-Zustände, Datums-/ISO-Wochen-Logik. |
+| `src/lib/` | Bereiche und Markierungs-Zustände, Datums-/ISO-Wochen-Logik, Sicherung. |
+| `public/areas/` | Die Bereichs-Icons (vom Nutzer geliefert, auf 144 px skaliert). |
 
 ## Abweichungen vom Prototyp
 
@@ -54,10 +57,21 @@ Samstag) und verliert seinen Zustand beim Neuladen. Diese Implementierung:
   aktuellen Woche. Wer die App an einem Montag zum ersten Mal öffnet, startet
   entsprechend leer — es gibt noch keinen vergangenen Tag.
 
-Der Auswertungstext der Wochenansicht ist wörtlich aus dem Design übernommen und
-damit auf dessen Samstag gemünzt („Zwei Tage bleiben noch."). Er passt sich dem
-echten Wochentag **nicht** an; das wäre neuer Text und damit eine
-Design-Entscheidung.
+Für die **laufende** Woche ist der Auswertungstext wörtlich aus dem Design
+übernommen und damit auf dessen Samstag gemünzt („Zwei Tage bleiben noch.") — er
+passt sich dem echten Wochentag nicht an. Für **abgeschlossene** Wochen wäre das
+schlicht falsch, deshalb steht dort eine kurze Zusammenfassung; dieser Wortlaut
+stammt nicht aus dem Design.
+
+Die **Bereichs-Icons** im Tag-Screen sind gelieferte Illustrationen mit eigener
+farbiger Scheibe. Sie ersetzen den getönten Kreis des Designs, der bisher den
+Zustand mitgetragen hat; damit dieses Signal nicht verloren geht, erscheint ein
+Icon nur an einem erledigten Tag in voller Farbe und sitzt sonst gewaschen im
+Hintergrund (`.washed`-Prinzip des Design-Systems).
+
+Die **Wochennavigation** (‹ ›) gab es im Prototyp nicht — ohne sie wäre die
+gespeicherte Historie nicht erreichbar. Vorwärts ist bei der laufenden Woche
+Schluss.
 
 Der Schalter „Sanfte Abenderinnerung" ist wie im Design reine Oberfläche: er
 merkt sich seinen Zustand, verschickt aber nichts. Eine echte Erinnerung um

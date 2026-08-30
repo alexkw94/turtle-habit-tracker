@@ -1,6 +1,8 @@
+import { useRef, useState } from 'react';
 import { Tappable } from '../components/Tappable';
 import { GearIcon } from '../components/icons';
 import { AREAS } from '../lib/areas';
+import { countRecordedDays, exportBackup, readBackup } from '../lib/backup';
 import type { HabitActions, HabitData } from '../state/useHabitStore';
 
 interface GoalsScreenProps {
@@ -16,6 +18,38 @@ export function GoalsScreen({
   data,
   actions,
 }: GoalsScreenProps) {
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const recorded = countRecordedDays(data);
+
+  const handleExport = async () => {
+    try {
+      const how = await exportBackup(data);
+      setStatus(
+        how === 'shared'
+          ? 'Sicherung ans Teilen-Menü übergeben.'
+          : 'Sicherung heruntergeladen.',
+      );
+    } catch {
+      setStatus('Die Sicherung konnte nicht erstellt werden.');
+    }
+  };
+
+  const handleImport = async (file: File) => {
+    try {
+      const restored = await readBackup(file);
+      const days = countRecordedDays(restored);
+      const ok = window.confirm(
+        `Sicherung mit ${days} aufgezeichneten Tagen einlesen? Die Daten auf diesem Gerät werden dabei ersetzt.`,
+      );
+      if (!ok) return;
+      actions.replaceAll(restored);
+      setStatus(`${days} Tage wiederhergestellt.`);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Datei nicht lesbar.');
+    }
+  };
+
   return (
     <div className="screen">
       <div>
@@ -81,6 +115,42 @@ export function GoalsScreen({
             </div>
           );
         })}
+      </div>
+
+      <div className="backup">
+        <div className="backup__head">
+          <div className="reminder__title">Deine Aufzeichnungen</div>
+          <div className="reminder__sub">
+            {recorded === 0
+              ? 'Noch keine Tage aufgezeichnet.'
+              : `${recorded} ${recorded === 1 ? 'Tag' : 'Tage'} aufgezeichnet — sie bleiben auf diesem Gerät gespeichert, auch über Wochen hinweg.`}
+          </div>
+        </div>
+        <div className="backup__actions">
+          <button type="button" className="btn btn-secondary tap" onClick={handleExport}>
+            Sichern
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary tap"
+            onClick={() => fileInput.current?.click()}
+          >
+            Wiederherstellen
+          </button>
+          <input
+            ref={fileInput}
+            type="file"
+            accept="application/json,.json"
+            hidden
+            onChange={event => {
+              const file = event.target.files?.[0];
+              // Reset first, so picking the same file twice still fires.
+              event.target.value = '';
+              if (file) void handleImport(file);
+            }}
+          />
+        </div>
+        {status && <div className="backup__status">{status}</div>}
       </div>
 
       <div className="reminder">

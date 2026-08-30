@@ -26,6 +26,8 @@ export interface HabitActions {
   toggleActive: (area: AreaId) => void;
   adjustGoal: (area: AreaId, delta: number) => void;
   toggleReminder: () => void;
+  /** Replaces everything — used when restoring a backup. */
+  replaceAll: (data: HabitData) => void;
 }
 
 export const markNoteKey = (day: string, area: AreaId) => `${day}:${area}`;
@@ -137,6 +139,16 @@ export function useHabitStore() {
     setData(d => ({ ...d, reminder: !d.reminder }));
   }, []);
 
+  const replaceAll = useCallback((restored: HabitData) => {
+    const initial = createInitial();
+    setData({
+      ...initial,
+      ...restored,
+      active: { ...initial.active, ...restored.active },
+      goals: { ...initial.goals, ...restored.goals },
+    });
+  }, []);
+
   const actions = useMemo<HabitActions>(
     () => ({
       setMark,
@@ -146,6 +158,7 @@ export function useHabitStore() {
       toggleActive,
       adjustGoal,
       toggleReminder,
+      replaceAll,
     }),
     [
       setMark,
@@ -155,6 +168,7 @@ export function useHabitStore() {
       toggleActive,
       adjustGoal,
       toggleReminder,
+      replaceAll,
     ],
   );
 

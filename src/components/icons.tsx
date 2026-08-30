@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import type { AreaId } from '../lib/areas';
+import type { Area } from '../lib/areas';
 
 /** Lucide-style interface icons: stroke 2.75, round joins (see the DS readme). */
 const stroke = {
@@ -24,36 +23,9 @@ export function TurtleMark() {
   );
 }
 
-const AREA_PATHS: Record<AreaId, ReactNode> = {
-  med: (
-    <>
-      <circle cx="12" cy="7" r="3" />
-      <path d="M4 20c1.8-3.4 4.6-5 8-5s6.2 1.6 8 5" />
-      <path d="M3 12h3M18 12h3" />
-    </>
-  ),
-  food: (
-    <>
-      <path d="M12 8c0-3 2.2-5 5-5 0 3-2 5-5 5z" />
-      <path d="M12 8c-3.9 0-7 2.9-7 6.6C5 18.4 8.1 21 12 21s7-2.6 7-6.4C19 10.9 15.9 8 12 8z" />
-    </>
-  ),
-  sleep: <path d="M20.5 13.3A8.5 8.5 0 1 1 10.7 3.5a6.6 6.6 0 0 0 9.8 9.8z" />,
-  sport: <path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10" />,
-  focus: (
-    <>
-      <rect x="6" y="2.5" width="12" height="19" rx="3" />
-      <path d="M3 21L21 3" />
-    </>
-  ),
-};
-
-export function AreaIcon({ area }: { area: AreaId }) {
-  return (
-    <svg width="23" height="23" viewBox="0 0 24 24" {...stroke}>
-      {AREA_PATHS[area]}
-    </svg>
-  );
+export function AreaIcon({ area }: { area: Area }) {
+  // Decorative: the habit's name sits right next to it in the row.
+  return <img className="area-icon" src={area.icon} alt="" aria-hidden="true" />;
 }
 
 export function SunIcon() {

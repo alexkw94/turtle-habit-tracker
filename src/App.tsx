@@ -12,7 +12,11 @@ import { markNoteKey, useHabitStore } from './state/useHabitStore';
 
 export default function App() {
   const { data, actions } = useHabitStore();
-  const week = useMemo(() => buildWeek(new Date()), []);
+  const today = useMemo(() => new Date(), []);
+
+  // Which week the Tag and Woche screens show; 0 is the running one.
+  const [weekOffset, setWeekOffset] = useState(0);
+  const week = useMemo(() => buildWeek(today, weekOffset), [today, weekOffset]);
 
   const [screen, setScreen] = useState<Screen>('day');
   const [selected, setSelected] = useState(week.todayIndex);
@@ -25,6 +29,14 @@ export default function App() {
   const pickDayFromWeek = (index: number) => {
     setSelected(index);
     setScreen('day');
+  };
+
+  const shiftWeek = (delta: number) => {
+    const offset = Math.min(0, weekOffset + delta);
+    setWeekOffset(offset);
+    // Land on the last day that week actually has.
+    setSelected(buildWeek(today, offset).todayIndex);
+    setSheetArea(null);
   };
 
   const selectDay = (index: number) => {
@@ -56,6 +68,7 @@ export default function App() {
               <WeekScreen
                 week={week}
                 onPickDay={pickDayFromWeek}
+                onShiftWeek={shiftWeek}
                 data={data}
                 actions={actions}
               />
